@@ -469,25 +469,19 @@
 	% 
 	% Here we have the typical use of a "T" for an initial drop letter
 	% and "HIS" in caps to complete the first word.
-	\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-	for IEEE journal papers produced under \LaTeX\ using
-	IEEEtran.cls version 1.8b and later.
+	\IEEEPARstart{T}{he} rapid development of Large Language Models (LLMs) has revolutionized Natural Language Processing (NLP), demonstrating remarkable results in a variety of tasks \cite{forecast5030030}. However, this success is accompanied by concerns regarding data privacy and copyright compliance. Modern LLMs are trained on massive, indiscriminately scraped datasets, leading to the unintended memorization of sensitive information, such as Personally Identifiable Information (PII) and copyright-protected content \cite{carlini2023quantifyingmemorizationneurallanguage}. This memorization process poses legal and ethical risks, particularly when models regurgitate training data during deployment \cite{Lucchi_2024} \cite{10.1145/3593013.3594067} \cite{https://doi.org/10.1002/pra2.1009}. These risks highlight the importance to selectively remove specific knowledge from a model without having to bear the cost retraining it from scratch. Consequently, effective Machine Unlearning (MU) would be a great contribution to safe and moral AI advancement. 
+	
+	The primary goal of MU is to erase the influence of specific data samples (the "forget set") without degrading the model's performance on the remaining data (the "retain set") or necessitating a computationally prohibitive retraining from scratch \cite{liu2024rethinkingmachineunlearninglarge}. Current state-of-the-art techniques, such as Gradient Ascent and Preference Optimization, attempt to achieve this by maximizing the loss on the target data. However, recent studies suggest that these methods may not result in true erasure. Instead, they often lead to suppression, where the model learns to mask the output while the underlying knowledge remains dormant but retrievable under adversarial prompting or specific internal states \cite{Wen2025Adversarial} \cite{xu2025unlearningisntdeletioninvestigating} \cite{unknown}. 
+	
+	Mechanistic Interpretability (MI) is an emerging field that seeks to reverse engineer deep learning models, decomposing complex behaviors into understandable parts like features (understandable input properties encoded in representations and activations) and circuits (sub-networks responsible for specific behaviors) \cite{Nanda2022Mechanistic} \cite{rai2025practicalreviewmechanisticinterpretability}.   
+	
+	This paper is structured as follows. First, I present key concepts of MI establishing a way of analyzing model internals. Second, I survey prominent MU algorithms, techniques and benchmarks. Finally, I propose 3 experiments on small-scale transformer architectures—specifically GPT-Nano, Pythia-160M, and GPT-2 Small. My goal is to reproduce unlearning results on those models and assess wether these methods achieve genuine knowledge erasure rather than superficial suppression.  
+	
 	% You must have at least 2 lines in the paragraph with the drop letter
 	% (should never be an issue)
-	I wish you the best of success.
-	
-	\hfill mds
-	
-	\hfill August 26, 2015
-	
-	\subsection{Subsection Heading Here}
-	Subsection text here.
 	
 	% needed in second column of first page if using \IEEEpubid
 	%\IEEEpubidadjcol
-	
-	\subsubsection{Subsubsection Heading Here}
-	Subsubsection text here.
 	
 	
 	% An example of a floating figure using the graphicx package.
@@ -620,10 +614,10 @@
 	
 	
 	% use section* for acknowledgment
-	\section*{Acknowledgment}
+	%\section*{Acknowledgment}
 	
 	
-	The authors would like to thank...
+	%The authors would like to thank...
 	
 	
 	% Can use something like this to put references on a page
@@ -656,14 +650,7 @@
 	% <OR> manually copy in the resultant .bbl file
 	% set second argument of \begin to the number of references
 	% (used to reserve space for the reference number labels box)
-	\begin{thebibliography}{1}
 		
-		\bibitem{IEEEhowto:kopka}
-		H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-		0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-		
-	\end{thebibliography}
-	
 	% biography section
 	% 
 	% If you have an EPS/PDF photo (graphicx package needed) extra braces are
@@ -675,22 +662,22 @@
 	%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 	% or if you just want to reserve a space for a photo:
 	
-	\begin{IEEEbiography}{Michael Shell}
-		Biography text here.
-	\end{IEEEbiography}
+	%\begin{IEEEbiography}{Michael Shell}
+	%	Biography text here.
+	%\end{IEEEbiography}
 	
 	% if you will not have a photo at all:
-	\begin{IEEEbiographynophoto}{John Doe}
-		Biography text here.
-	\end{IEEEbiographynophoto}
+	%\begin{IEEEbiographynophoto}{John Doe}
+	%	Biography text here.
+	%\end{IEEEbiographynophoto}
 	
 	% insert where needed to balance the two columns on the last page with
 	% biographies
 	%\newpage
 	
-	\begin{IEEEbiographynophoto}{Jane Doe}
-		Biography text here.
-	\end{IEEEbiographynophoto}
+	%\begin{IEEEbiographynophoto}{Jane Doe}
+	%	Biography text here.
+	%\end{IEEEbiographynophoto}
 	
 	% You can push biographies down or up by placing
 	% a \vfill before or after them. The appropriate
@@ -704,7 +691,8 @@
 	% is flush with the other column.
 	%\enlargethispage{-5in}
 	
-	
+	\bibliographystyle{IEEEtran}
+	\bibliography{references}
 	
 	% that's all folks
 \end{document}
