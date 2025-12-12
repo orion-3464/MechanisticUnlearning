@@ -1,6 +1,7 @@
 This section is based on the comprehensive survey \cite{rai2025practicalreviewmechanisticinterpretability}, which introduces novice readers to the concepts and techniques of mechanistic interpretability through detailed explanations and appropriate references.
 
 \subsection{Definition and Objects of Study}
+\label{sec:a}
 
 The objective of Mechanistic Interpretability is to decode a model's internal decision-making processes into a human-friendly form. This is achieved by studying its individual components and their relationships, piecing together a comprehensive explanation of the model's overall behavior.
 
@@ -14,7 +15,7 @@ This influential paper \cite{olah2020zoom} distinguished three MI areas of study
 	\item \textit{Universality:} This area explores wether similar features, circuits and other computational archetypes are formed across different LMs and learning tasks. 
 \end{enumerate}
 
-\subsection{Workflow}
+\subsection{Features' Workflow}
 
 Survey \cite{rai2025practicalreviewmechanisticinterpretability} introduces a workflow to tackling interpretability tasks concerning features. The primary distinction lies in whether the analysis targets a predetermined feature believed to exist within the model, or alternatively employs an exploratory approach to discover features derived from the input. 
 
@@ -27,4 +28,49 @@ First I will address the case of an existing target feature.
 \end{enumerate}
 
 In the case of an open-ended feature study, we make observations in our model's activations and try to interpret those as features. These two steps are called \textit{observation} and \textit{explanation} in \cite{rai2025practicalreviewmechanisticinterpretability}. This is usually done via visualization of the activations and the intervention of a human observer that will distinguish the feature present in those based in the input and context. Additionally, someone can utilize unsupervised learning techniques and perform a kind of clustering using cosine similarity or other statistical information.
+
+\subsection{Circuits' Workflow}
+The study area of circuits can also be divided into two categories. One is about interpreting an LLM's behavior and the second one about reverse engineering an LM component.
+
+In the first case, our methodology consists of two discrete steps:
+
+\begin{enumerate}
+	\item \textit{LM behavior and dataset:} The researcher selects an LM behavior and an appropriate dataset. The task is to pinpoint the circuit responsible for that behavior. 
+	
+	\item \textit{Computational Graph Definition:} Describe the model in terms of a computational graph M. As I mentioned in \href{sec:a}{this subsection}, this gives as a way to describe the circuit as a sub-graph of M. 
+	
+	\item \textit{Localization:} This step is responsible for the identification of the components that contribute to a specific behavior that we want to explore. It corresponds to the localization of the nodes and the edges of the computational sub-graph that I mentioned in the step above. 
+	
+	\item \textit{Interpretation:} Trying to understand how these components implement the behavior that we observe
+	
+	\item \textit{Evaluation:} The discovered circuits are evaluated in terms of faithfulness, minimality and completeness. 
+\end{enumerate}
+
+In the second case the researcher focuses on a single component of the LM and try to understand its role in the computations, independently of input and task. It is the same as the fourth step of the first case. 
+
+\subsection{Universality's Workflow}
+Universality examines different LMs and tasks are tackled by the emergence of the same circuits and features. The established workflow \cite{rai2025practicalreviewmechanisticinterpretability} can be described using five steps:
+
+\begin{enumerate}
+	\item \textit{Scope of Universality:} It distinguishes between the study of universality in features and the one corresponding to circuits.
+	
+	\item \textit{Dimension of Variations:} Definition of the ways that LLMs studied differ (e.g. size, training data, task). 
+	
+	\item \textit{Feature and Circuit Study:} Implement the workflows discussed in the two previous subsections.
+	
+	\item \textit{Evaluation of Feature Universality:} This involves the inference of the models using different datasets. Then, their activations are examined for common patterns. The similarity among activations is measured using Pearson similarity. 
+	
+	\item \textit{Evaluation of Circuit Universality:} We evaluate the circuit universality by examining the common structures in components responsible for the same behaviors across the different LLMs. 
+\end{enumerate}
+
+\subsection{MI Techniques and Evaluation Methods}
+
+The activations of the final layer of a transformer are called logits. To transform logits to human language, we multiply them with the unembedding matrix $W_U$ \cite{elhage2021framework}. Vocabulary Projection Methods (VPMs) take advantage of that fact and multiply $W_U$ with intermediate representations in order to turn them to human-interpretable language, too. The underlying assumption is that all the layers of an LLM operate in the same embedding space, which is generally not true. This assumption and the application of SVD in $W_U$ constitute the different VPMs mentioned in \cite{rai2025practicalreviewmechanisticinterpretability}.    
+
+Another idea is to directly change the values of some intermediate representations of the transformer circuit and observe the variations in its output. The noising-base interventions aim to uncover parts of the LLM necessary to exhibition of a specific behavior by removing some parts of it during forward inference. Denoising-based interventions find sufficient components for the restoration of a model's behavior. First we remove components till an output Y stops coming up. Then we introduce the removed circuits one by one till the response emerges again \cite{rai2025practicalreviewmechanisticinterpretability}.
+
+This paper \cite{elhage2021framework} mentions that each neuron is polysemantic. This happens due to the phenomenon of superposition \cite{elhage2022toymodels}. It suggests that the vector space that is learned by our network is represented in it by non-orthogonal vectors. Those basis can encoded exponentially more vectors than orthogonal ones. So, we observe the same neurons firing for seemingly different concepts like a ship and a cow. SAE attempt to solve this problem by transforming the intermediate representation on to a space with a larger number of dimensions. We hope that our feature will be disentangled in this higher-dimensionality space and we will be able to distinguish them by examining the intermediate representation of the sparse autoencoder \cite{rai2025practicalreviewmechanisticinterpretability}.
+
+A final approach called probing suggests the use of a classificator (probe) that will distinguish pre-defined features in the activations. But this is limited by the fact that potential classification by the probe indicates only correlation and not causal relation among features and activations that caused the classification \cite{rai2025practicalreviewmechanisticinterpretability}. 
+
 
