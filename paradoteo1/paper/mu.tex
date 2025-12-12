@@ -1,0 +1,45 @@
+\subsection{Unlearning Methodologies}
+
+In this subsection I want to mention some methods for MU that are covered in papers \cite{ren2025sokmachineunlearninglarge}, \cite{geng2025comprehensivesurveymachineunlearning} and \cite{guo2024mechanisticunlearningrobustknowledge}. I present the methods examined by these authors, showcasing their main ideas, advantages and disadvantages.
+
+Both \cite{ren2025sokmachineunlearninglarge} and \cite{geng2025comprehensivesurveymachineunlearning} mention Gradient Ascend (GA) method. The idea is to fine tune the model by negating the training influence of the forget set $D_f$. This means that we should minimize the reverse log-likelihood on $D_f$.
+
+$$\mathcal{L}_{GA}(\theta) = -\mathcal{L}_{train}(\theta) = \mathcal{E}_{(x,y)~D_f}[-\log(p(y|x;\theta))]$$
+
+\noindent Its main drawback is that it degrades the model's performance and it is relatively sensitive to specific hyperparameters \cite{liu2024rethinkingmachineunlearninglarge} \cite{zhang2024negativepreferenceoptimizationcatastrophic}.
+
+\noindent Negative Performance Optimization (NPO) is a variant of GA. It is an attempt to prevent the model from producing low quality output. Basically, we frame the forget set $D_f$ as a preference set $D_p$ that is constructed through human ordering of the outputs. Then, we maximize the following metric:
+
+$$\mathcal{L}_{NPO}(\theta) = -\frac{2}{\beta}\mathcal{E}_{(x,y)~D_f}\left[\log\left(\sigma\left(-\beta\log\left(\frac{p(y|x;\theta)}{p(y|x;\theta_{ori})}\right)\right)\right)\right]$$
+
+\noindent A final GA variant mentioned in \cite{ren2025sokmachineunlearninglarge} is based on the idea of splitting the model's loss in two terms. One responsible for the retain set $D_r$ and one for the forget loss on $D_f$. So, the metric that is going to be minimized is:
+
+$$\mathcal{L}_u = \mathcal{L}_f + \lambda \mathcal{L}_r$$
+
+\noindent where $\mathcal{L}_r$ is expressed in terms of KL-divergence. 
+
+Another approach is to edit the model's learned weight space and as a consequence, alter its outputs \cite{ren2025sokmachineunlearninglarge} \cite{geng2025comprehensivesurveymachineunlearning}. 
+
+$$\Delta \theta_T = \theta_T^{'}-\theta^{(0)}$$ 
+
+\noindent $\Delta \theta_T$ is the difference between fine-tuned on a task and the original weights of the model. So unlearning is achieved through the following subtraction:
+
+$$\theta = \theta^{(0)}-\lambda \Delta \theta_T \; ,\lambda>0$$
+
+
+
+\subsection{Unlearning Benchmarks}
+
+Some existing MU benchmarks mentioned in \cite{geng2025comprehensivesurveymachineunlearning} and \cite{ren2025sokmachineunlearninglarge} are:
+
+\begin{itemize}
+	\item \textit{WHP:} Who is Harry Potter consists of a dataset made of Harry Potter's books (2.1M tokens) and Harry Potter-related synthetic text (1M tokens). It evaluates unlearning with 330 questions concerning Harry Potter, scored with GPT-4.
+	
+	\item \textit{TOFU:} TOFU is a synthetic dataset of 200 fake authors and some fake books. The dataset also include 100 real author profiles and 117 world facts. The last contribute to the model's quality assessment after the unlearning process (unlearning quality is also evaluated).
+	
+	\item \textit{WMDP:} It consists of 3668 questions about hazardous knowledge from different fields. It evaluates LLMs hazardous knowledge unlearning.
+	
+	\item \textit{RWKU:} It is basically a forget set of 200 public figures and several forget probes. Moreover, it offers some prompts trying to cause jailbreak after poor unlearning, uncovering its poor quality (model has merely suppressed the output).
+	
+	\item \textit{MUSE:} Its pipeline is similar to TOFU's but it uses a novel dataset (not present in any LLM's training) and provides better metrics.
+\end{itemize}
