@@ -1,0 +1,30 @@
+This section is based on the comprehensive survey \cite{rai2025practicalreviewmechanisticinterpretability}, which introduces novice readers to the concepts and techniques of mechanistic interpretability through detailed explanations and appropriate references.
+
+\subsection{Definition and Objects of Study}
+
+The objective of Mechanistic Interpretability is to decode a model's internal decision-making processes into a human-friendly form. This is achieved by studying its individual components and their relationships, piecing together a comprehensive explanation of the model's overall behavior.
+
+This influential paper \cite{olah2020zoom} distinguished three MI areas of study:
+
+\begin{enumerate}
+	\item \textit{Features:} They are properties derived from the input that have special human meaning and are embedded into the model's activations. For example, the input token "skrew driver" may induce features like "tool" or "metal". These extracted features are used by the models as fundamental units of computation for downstream tasks, such as classification, prediction, and generation \cite{elhage2022toymodels} \cite{elhage2021framework}.
+	
+	\item \textit{Circuits:} It is helpful to perceive neural networks as computational graphs. This viewpoint is adopted by PyTorch \cite{paszke2019pytorchimperativestylehighperformance}, too, one of the most widespread frameworks for deep learning models. A circuit is a sub-graph of this computational graph, responsible for specific Language Model's (LM) behaviors. Although there exist generalizations for this definition, I find the one presented above the most intuitive and practically useful. 
+	
+	\item \textit{Universality:} This area explores wether similar features, circuits and other computational archetypes are formed across different LMs and learning tasks. 
+\end{enumerate}
+
+\subsection{Workflow}
+
+Survey \cite{rai2025practicalreviewmechanisticinterpretability} introduces a workflow to tackling interpretability tasks concerning features. The primary distinction lies in whether the analysis targets a predetermined feature believed to exist within the model, or alternatively employs an exploratory approach to discover features derived from the input. 
+
+First I will address the case of an existing target feature.
+
+\begin{enumerate}
+	\item \textit{Hypothesis Generation:} The proposal of the presence of a specific feature in our model's representations
+	
+	\item \textit{Hypothesis Validation:} The conducting of tests that confirm or deny the existence of the proposed feature in the LM. This can be done either by probing for the feature directly or by extracting every feature present in the model and then examining if the target is one of them.
+\end{enumerate}
+
+In the case of an open-ended feature study, we make observations in our model's activations and try to interpret those as features. These two steps are called \textit{observation} and \textit{explanation} in \cite{rai2025practicalreviewmechanisticinterpretability}. This is usually done via visualization of the activations and the intervention of a human observer that will distinguish the feature present in those based in the input and context. Additionally, someone can utilize unsupervised learning techniques and perform a kind of clustering using cosine similarity or other statistical information.
+

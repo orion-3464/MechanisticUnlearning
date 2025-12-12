@@ -1,0 +1,32 @@
+The design of my experiments proceeded through three stages:
+
+\begin{enumerate}
+	\item Selection of appropriate models amenable to training with constrained resources.
+	
+	\item Identification of unlearning techniques to be investigated.
+	
+	\item Establishment of an evaluation framework for each experiment.  
+\end{enumerate}
+
+\subsection{Model Selection}
+The first step was to assess available computational resources. Given that free tiers of online platforms often impose strict time limits (e.g., 30 hours of GPU access), I designed the experimental requirements to be compatible with my local laptop environment. This ensured the experiments were not dependent on constrained external resources.
+
+My GPU has 6GB of VRAM, imposing a strict upper bound on model size. After evaluating available options, I selected these three models:
+
+\begin{itemize}
+	\item \textit{gptNano:} \href{https://github.com/karpathy/nanoGPT}{This model} consists of 85.584 parameters and its authors offer a \href{https://huggingface.co/datasets/karpathy/tiny_shakespeare}{custom dataset} (tiny\_shakespear) for fine tuning.  
+	
+	\item \textit{GPT-2:} This is the smallest version of GPT-2 model (\href{https://huggingface.co/openai-community/gpt2}{GPT-2 Small}), with 124M parameters.
+	
+	\item \textit{Pythia-160M:} As its  \href{https://huggingface.co/EleutherAI/pythia-160m}{online resource} proposes, this model is not suitable for deployment. But, the 154 checkpoints provided and its compact size make it suitable for testing the behavior, functionality and limitations of LLMs. 
+\end{itemize}
+
+I found this \href{https://bbycroft.net/llm}{useful visualization} that give us a perspective on the architectural and size differences of the first two models. 
+
+\subsection{The Experiments}
+
+The first experiment will simulate the existence of sensitive data in the training set. We will add the phrase \textit{"The password for NTUA server is: 42\_@nswer\_t0\_l1fe"} in 100-200 places of the dataset and fine-tune gptNano with it. This should make our model memorize the password \cite{carlini2023quantifyingmemorizationneurallanguage}. Then I will prompt the model to confirm that the password is indeed memorized. Then, I will apply Gradient Ascent (GA) on that specific input sentence to penalize its generation. Finally, I will check if the password is still provided by the LLM when prompted and visualize it attention heads with CircuitsVis (the model is tiny, so this is feasible).
+
+The second experiment will incorporate MI techniques to the unlearning process, too. I find SAEs extremely promising as an interpretability technique. They are trying to tackle the superposition problem \cite{elhage2022toymodels} in a straightforward manner and may provide useful insight to the researcher, as we highlighted in the MI section of this paper. \href{https://github.com/decoderesearch/SAELens}{SAELens} will provide the SAE framework that we will need to identify features and semantic connections such as Athens-Parthenon, London-Big Ben or Paris-Eiffel Tower. Then, I will apply Negative Performance Optimization (NPO) on the specific activations identified with the SAE. Finally, I will prompt the model with prompts that relate implicitly to the concept that it tried to unlearn. If the same activations of SAE fire again, then the unlearning was only superficial. Otherwise, the erasure will be characterized as genuine-deep.
+
+If time constraints allow it, I will design and conduct further experiments on more unlearning and interpretability techniques, demonstrating their results on small-scale models such as those mentioned in this section.
